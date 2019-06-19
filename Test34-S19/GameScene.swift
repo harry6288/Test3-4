@@ -12,40 +12,62 @@ import GameplayKit
 class GameScene: SKScene {
     
     var nextLevelButton:SKLabelNode!
+    var xd: CGFloat = 0
+    var yd: CGFloat = 0
+    
+    var LEG = SKSpriteNode(imageNamed: "leg")
+     var Hair1 = SKSpriteNode(imageNamed: "hair1")
+     var Hair2 = SKSpriteNode(imageNamed: "hair2")
+     var Hair3 = SKSpriteNode(imageNamed: "hair3")
+    
     
     
     override func didMove(to view: SKView) {
         print("This is level 1")
         self.nextLevelButton = self.childNode(withName: "nextLevelButton") as! SKLabelNode
+   
+        
+    
+    
+    
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
     }
+    private var currentNode: SKNode?
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first
-        if (touch == nil) {
-            return
+        if let touch = touches.first{
+            let location = touch.location(in: self)
+            let touchesNodes = self.nodes(at: location)
+            for node in touchesNodes.reversed(){
+                if node.name == "hair1" {
+                    self.currentNode = node
+                    node.removeFromParent()
+                
+            }
+        
+            }
+            
         }
         
-        let location = touch!.location(in:self)
-        let node = self.atPoint(location)
-        
-        
-        
-        
-        // MARK: Switch Levels
-        if (node.name == "nextLevelButton") {
-            let scene = SKScene(fileNamed:"Level2")
-            if (scene == nil) {
-                print("Error loading level")
-                return
+        func touchesMoves(_touches: Set<UITouch>, with event: UIEvent?){
+                if let touch = touches.first, let node = self.currentNode {
+                    let touchLocation = touch.location(in: self)
+                    node.position = touchLocation
             }
-            else {
-                scene!.scaleMode = .aspectFill
-                view?.presentScene(scene!)
-            }
-        }
-        
+            
+            func touchesEnded(_touches:Set<UITouch>, with event: UIEvent?){
+                if SKNode().name == "hair2"
+                {
+                    self.currentNode = Hair2
+                }
+                func touchesCancelled(_touches:Set<UITouch>, with event: UIEvent?){
+                self.currentNode = Hair2
+                }
+       
+
     }
+}
+}
 }
